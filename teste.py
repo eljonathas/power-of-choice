@@ -214,7 +214,7 @@ if __name__ == "__main__":
     history_fedavg = run_simulation(
         server_app=server_app_baseline,
         client_app=client_app,
-        num_supernodes=NUM_CLIENTS,
+        num_supernodes=1,  # reduz concorrência para evitar OOM
         backend_config=backend_config,
     )
     fedavg_time = time.time() - start
@@ -224,7 +224,7 @@ if __name__ == "__main__":
     history_poc = run_simulation(
         server_app=server_app_poc,
         client_app=client_app,
-        num_supernodes=NUM_CLIENTS,
+        num_supernodes=1,  # reduz concorrência para evitar OOM
         backend_config=backend_config,
     )
     poc_time = time.time() - start
@@ -245,6 +245,21 @@ if __name__ == "__main__":
     plt.xlabel("Rodada")
     plt.ylabel("Acurácia")
     plt.legend()
+    plt.show()
+
+    plt.figure()
+    plt.plot(rounds, loss_fedavg, "b-o", label="FedAvg")
+    plt.plot(rounds, loss_poc, "r-o", label="Power-of-Choice")
+    plt.title("Perda Global por Rodada")
+    plt.xlabel("Rodada")
+    plt.ylabel("Perda")
+    plt.legend()
+    plt.show()
+
+    plt.figure()
+    plt.bar(["FedAvg", "Power-of-Choice"], [fedavg_time, poc_time])
+    plt.title("Tempo Total de Simulação")
+    plt.ylabel("Segundos")
     plt.show()
 
     plt.figure()
